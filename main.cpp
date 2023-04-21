@@ -44,6 +44,10 @@ int main() {
     stdio_init_all();
     BMP280::init();
     initMainInputs();
+    
+    
+    BMP280::setOversampling(BMP280::OVERSAMPLING_TEMPERATURE::OSRS_T_4, BMP280::OVERSAMPLING_PRESSURE::OSRS_P_4);
+
     bool allInputsLow = true;
     while(true) {
         if (!gpio_get(INPUT_1) && !gpio_get(INPUT_2)) allInputsLow = true;
