@@ -46,8 +46,8 @@ int main() {
     initMainInputs();
     
     
-    BMP280::setOversampling(BMP280::OVERSAMPLING_TEMPERATURE::OSRS_T_4, BMP280::OVERSAMPLING_PRESSURE::OSRS_P_4);
-
+    BMP280::setOversampling(BMP280::OVERSAMPLING_TEMPERATURE::OSRS_T_16, BMP280::OVERSAMPLING_PRESSURE::OSRS_P_16);
+    BMP280::setConfigRegister(TIME_STANDBY::t500);
     bool allInputsLow = true;
     while(true) {
         if (!gpio_get(INPUT_1) && !gpio_get(INPUT_2)) allInputsLow = true;
@@ -55,6 +55,9 @@ int main() {
         if (gpio_get(INPUT_1) && allInputsLow) {
             printf("testing\n");
             BMP280::test1();
+            //you can trigger measurment using readMeasurmentsRaw()
+            //it will be stored for 8 bit in lastTemp, lastPressure for 32 bit temp, press
+            
             printf("\n");
         }
 
