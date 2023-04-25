@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "hardware/spi.h"
+#include "hardware/i2c.h"
 
 #ifndef INT_TO_BIN
 #define INT_TO_BIN
@@ -17,7 +17,7 @@
 #endif
 
 
-#include "BMP280.cpp"
+#include "BMP280_i2c.cpp"
 
 #define ALLWAYS_HIGHT 16
 #define INPUT_1 17
@@ -42,10 +42,9 @@ void initMainInputs() {
 
 int main() {
     stdio_init_all();
-    BMP280::init();
     initMainInputs();
-    
-    
+    sleep_ms(2000);
+    BMP280::init(false);
     BMP280::setOversampling(BMP280::OVERSAMPLING_TEMPERATURE::OSRS_T_16, BMP280::OVERSAMPLING_PRESSURE::OSRS_P_16);
     BMP280::setConfigRegister(TIME_STANDBY::t500);
     bool allInputsLow = true;
@@ -53,11 +52,10 @@ int main() {
         if (!gpio_get(INPUT_1) && !gpio_get(INPUT_2)) allInputsLow = true;
         
         if (gpio_get(INPUT_1) && allInputsLow) {
-            printf("testing\n");
-            BMP280::test1();
+            BMP280::takeMesurment();
             //you can trigger measurment using readMeasurmentsRaw()
             //it will be stored for 8 bit in lastTemp, lastPressure for 32 bit temp, press
-            
+
             printf("\n");
         }
 
